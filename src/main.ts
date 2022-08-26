@@ -1,6 +1,5 @@
 import * as core from '@actions/core'
 import * as exec from '@actions/exec'
-import {ExecOptions} from '@actions/exec/lib/interfaces'
 
 async function run(): Promise<void> {
   try {
@@ -13,18 +12,7 @@ async function run(): Promise<void> {
     const file = core.getInput('file') || 'winch.yml'
     core.debug(`file = ${file}`)
 
-    const options: ExecOptions = {
-      // listeners: {
-      //   stdout: (data: Buffer) => {
-      //     core.info(data.toString())
-      //   },
-      //   stderr: (data: Buffer) => {
-      //     core.error(data.toString())
-      //   }
-      // }
-    }
-
-    await exec.exec('winch', ['--file', file, command], options)
+    await exec.exec('winch', ['--file', file, command])
   } catch (error) {
     if (error instanceof Error) core.setFailed(error.message)
   }

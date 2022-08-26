@@ -3979,17 +3979,7 @@ async function run() {
         core.debug(`command = ${command}`);
         const file = core.getInput('file') || 'winch.yml';
         core.debug(`file = ${file}`);
-        const options = {
-            listeners: {
-                stdout: (data) => {
-                    core.info(data.toString());
-                },
-                stderr: (data) => {
-                    core.error(data.toString());
-                }
-            }
-        };
-        await exec.exec('winch', ['--file', file, command], options);
+        await exec.exec('winch', ['--file', file, command]);
     }
     catch (error) {
         if (error instanceof Error)
