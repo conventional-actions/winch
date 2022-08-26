@@ -13,6 +13,3 @@ jobs:
       - uses: actions/checkout@v3
       - run: npm install
       - run: npm run all
-      - uses: ./
-        with:
-          command: build
