@@ -1,0 +1,23 @@
+name: 'winch'
+description: 'Run winch'
+author: 'Conventional Actions'
+inputs:
+  version:
+    required: false
+    description: 'version of winch to use'
+    default: latest
+  command:
+    required: false
+    description: 'command to run'
+    default: ci
+  file:
+    required: false
+    description: 'specify the location of the Winchfile'
+    default: winch.yml
+runs:
+  using: 'node16'
+  pre: 'dist/setup/index.js'
+  main: 'dist/main/index.js'
+branding:
+  icon: tool
+  color: purple
