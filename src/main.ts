@@ -14,14 +14,14 @@ async function run(): Promise<void> {
     core.debug(`file = ${file}`)
 
     const options: ExecOptions = {
-      listeners: {
-        stdout: (data: Buffer) => {
-          core.info(data.toString())
-        },
-        stderr: (data: Buffer) => {
-          core.error(data.toString())
-        }
-      }
+      // listeners: {
+      //   stdout: (data: Buffer) => {
+      //     core.info(data.toString())
+      //   },
+      //   stderr: (data: Buffer) => {
+      //     core.error(data.toString())
+      //   }
+      // }
     }
 
     await exec.exec('winch', ['--file', file, command], options)
