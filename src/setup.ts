@@ -28,6 +28,8 @@ async function run(): Promise<void> {
     core.info(
       `Successfully extracted winch ${versionSpec} ${osPlatform} ${osArch} to ${toolPath}`
     )
+
+    core.addPath(toolPath)
   } catch (error) {
     if (error instanceof Error) core.setFailed(error.message)
   }

@@ -6575,6 +6575,7 @@ async function run() {
         core.debug(`Extracted ${versionSpec} ${osPlatform} ${osArch} to ${extPath}`);
         const toolPath = await tc.cacheDir(extPath, 'winch', versionSpec, os_1.default.arch());
         core.info(`Successfully extracted winch ${versionSpec} ${osPlatform} ${osArch} to ${toolPath}`);
+        core.addPath(toolPath);
     }
     catch (error) {
         if (error instanceof Error)
