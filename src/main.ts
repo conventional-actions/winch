@@ -1,18 +1,12 @@
 import * as core from '@actions/core'
 import * as exec from '@actions/exec'
+import {getConfig} from './config'
 
 async function run(): Promise<void> {
   try {
-    const versionSpec = core.getInput('version') || 'latest'
-    core.debug(`version ${versionSpec}`)
+    const config = await getConfig()
 
-    const command = core.getInput('command') || 'ci'
-    core.debug(`command = ${command}`)
-
-    const file = core.getInput('file') || 'winch.yml'
-    core.debug(`file = ${file}`)
-
-    await exec.exec('winch', ['--file', file, command])
+    await exec.exec('winch', ['--file', config.file, config.command])
   } catch (error) {
     if (error instanceof Error) core.setFailed(error.message)
   }

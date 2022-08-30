@@ -6524,6 +6524,49 @@ exports["default"] = _default;
 
 /***/ }),
 
+/***/ 6373:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.getConfig = void 0;
+const core = __importStar(__nccwpck_require__(2186));
+async function getConfig() {
+    return {
+        versionSpec: core.getInput('version') || 'latest',
+        command: core.getInput('command') || 'ci',
+        file: core.getInput('file') || 'winch.yml'
+    };
+}
+exports.getConfig = getConfig;
+
+
+/***/ }),
+
 /***/ 8429:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
@@ -6559,22 +6602,23 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__nccwpck_require__(2186));
 const tc = __importStar(__nccwpck_require__(7784));
 const os_1 = __importDefault(__nccwpck_require__(2037));
+const config_1 = __nccwpck_require__(6373);
 async function run() {
     try {
+        const config = await (0, config_1.getConfig)();
         const osPlatform = os_1.default.platform();
         const osArch = os_1.default.arch() === 'x64' ? 'amd64' : os_1.default.arch();
-        const versionSpec = core.getInput('version') || 'latest';
-        core.debug(`Downloading ${versionSpec} ${osPlatform} ${osArch} version`);
-        const url = versionSpec === 'latest'
+        core.debug(`Downloading ${config.versionSpec} ${osPlatform} ${osArch} version`);
+        const url = config.versionSpec === 'latest'
             ? `https://github.com/winchci/winch/releases/latest/download/${osPlatform}-${osArch}.tgz`
-            : `https://github.com/winchci/winch/releases/download/${versionSpec}/${osPlatform}-${osArch}.tgz`;
-        core.info(`Downloading ${versionSpec} ${osPlatform} ${osArch} from ${url}`);
+            : `https://github.com/winchci/winch/releases/download/${config.versionSpec}/${osPlatform}-${osArch}.tgz`;
+        core.info(`Downloading ${config.versionSpec} ${osPlatform} ${osArch} from ${url}`);
         const downloadPath = await tc.downloadTool(url);
-        core.debug(`Downloaded ${versionSpec} ${osPlatform} ${osArch} to ${downloadPath}`);
+        core.debug(`Downloaded ${config.versionSpec} ${osPlatform} ${osArch} to ${downloadPath}`);
         const extPath = await tc.extractTar(downloadPath);
-        core.debug(`Extracted ${versionSpec} ${osPlatform} ${osArch} to ${extPath}`);
-        const toolPath = await tc.cacheDir(extPath, 'winch', versionSpec, os_1.default.arch());
-        core.info(`Successfully extracted winch ${versionSpec} ${osPlatform} ${osArch} to ${toolPath}`);
+        core.debug(`Extracted ${config.versionSpec} ${osPlatform} ${osArch} to ${extPath}`);
+        const toolPath = await tc.cacheDir(extPath, 'winch', config.versionSpec, os_1.default.arch());
+        core.info(`Successfully extracted winch ${config.versionSpec} ${osPlatform} ${osArch} to ${toolPath}`);
         core.addPath(toolPath);
     }
     catch (error) {
